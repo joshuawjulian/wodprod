@@ -1,0 +1,9 @@
+# .dockerignore
+.git
+node_modules
+.svelte-kit
+build/
+Dockerfile
+docker-compose*
+.dockerignore
+.env
