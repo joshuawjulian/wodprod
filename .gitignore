@@ -1,4 +1,7 @@
 node_modules
+.pnpm-store
+.pnpm-*
+pnpm*
 
 # Output
 .output
@@ -7,6 +10,8 @@ node_modules
 .wrangler
 /.svelte-kit
 /build
+/drizzle/meta
+
 
 # OS
 .DS_Store
