@@ -10,7 +10,6 @@ pnpm*
 .wrangler
 /.svelte-kit
 /build
-/drizzle/meta
 
 
 # OS

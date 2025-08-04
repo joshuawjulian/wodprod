@@ -1,3 +1,6 @@
+<script lang="ts">
+</script>
+
 <div class="dropdown mb-72">
 	<div tabindex="0" role="button" class="btn m-1">
 		Theme
