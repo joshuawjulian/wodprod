@@ -11,9 +11,11 @@ import {
 import { getUserById } from '../database/user.model';
 
 // Updates the session and returns the refresh and auth tokens.
-export async function refreshSession(
-	userId: number,
-): Promise<{ refreshToken: string; authToken: string }> {
+export async function refreshSession(userId: number): Promise<{
+	refreshToken: string;
+	refreshTokenExpires: Date;
+	authToken: string;
+}> {
 	// verify userId is valid
 	const user = await getUserById(userId);
 	if (!user) {
@@ -21,20 +23,12 @@ export async function refreshSession(
 	}
 	// create new refreshToken
 	const refreshTokenExpires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
-	const refreshString = generateRefreshTokenString();
-	const refreshTokenHash = hashRefreshToken(refreshString);
+	const refreshToken = generateRefreshTokenToken();
+	const refreshTokenHash = hashRefreshToken(refreshToken);
 	const newSession = await upsertSession(
 		userId,
 		refreshTokenHash,
 		refreshTokenExpires,
-	);
-	const refreshToken = createToken(
-		{
-			token: refreshString,
-			iat: Math.floor(Date.now() / 1000),
-			exp: Math.floor(refreshTokenExpires.getTime() / 1000),
-		},
-		'30d',
 	);
 
 	//create auth token
@@ -42,6 +36,7 @@ export async function refreshSession(
 	const authToken = createToken(authTokenPayload, '15m');
 	return {
 		refreshToken,
+		refreshTokenExpires,
 		authToken,
 	};
 }
@@ -96,7 +91,7 @@ export function createToken(
 	return sign(payload, JWT_SECRET, { expiresIn });
 }
 
-export function generateRefreshTokenString(): string {
+export function generateRefreshTokenToken(): string {
 	return randomBytes(32).toString('hex');
 }
 

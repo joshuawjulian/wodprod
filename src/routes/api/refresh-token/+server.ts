@@ -1,11 +1,14 @@
 import { json } from '@sveltejs/kit';
-import { createHash, randomBytes } from 'crypto';
-import { sign } from 'jsonwebtoken';
 
-import { JWT_SECRET } from '$env/static/private';
 // These would be your database functions to find and update sessions
-import { findSessionByTokenHash } from '$lib/server/database/session.model';
-import { hashRefreshToken } from '$lib/server/services/auth.services.js';
+import {
+	findSessionByTokenHash,
+	invalidateSessionByRefreshTokenHash,
+} from '$lib/server/database/session.model';
+import {
+	hashRefreshToken,
+	refreshSession,
+} from '$lib/server/services/auth.services.js';
 
 // This function handles the token refresh request.
 export async function POST({ cookies }) {
@@ -35,36 +38,23 @@ export async function POST({ cookies }) {
 
 		// --- Refresh Token Rotation ---
 		// 4. Invalidate the old token to prevent reuse.
-		session.isValid = false;
+		await invalidateSessionByRefreshTokenHash(oldTokenHash);
 
 		// 5. Generate a NEW auth token and a NEW refresh token.
-		const newAuthToken = sign({ userId: session.userId }, JWT_SECRET, {
-			expiresIn: '15m',
-		});
-		const newRefreshToken = randomBytes(32).toString('hex');
-		const newRefreshTokenHash = createHash('sha256')
-			.update(newRefreshToken)
-			.digest('hex');
-		const newExpiryDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
-
-		// 6. Update the session in the database with the new refresh token hash and expiry.
-		await updateSession(session.id, {
-			refreshTokenHash: newRefreshTokenHash,
-			expiresAt: newExpiryDate,
-			isValid: true,
-		});
+		const { refreshToken, refreshTokenExpires, authToken } =
+			await refreshSession(session.userId);
 
 		// 7. Set the new refresh token in a secure cookie.
-		cookies.set('refresh_token', newRefreshToken, {
+		cookies.set('refresh_token', refreshToken, {
 			path: '/',
 			httpOnly: true,
 			sameSite: 'strict',
 			secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-			expires: newExpiryDate,
+			expires: refreshTokenExpires,
 		});
 
 		// 8. Return the new auth token in the response body.
-		return json({ newAuthToken });
+		return json({ authToken });
 	} catch (err) {
 		console.error('Error during token refresh:', err);
 		return json({ error: 'An internal error occurred.' }, { status: 500 });
