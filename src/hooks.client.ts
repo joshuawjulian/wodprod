@@ -1,6 +1,7 @@
 // src/hooks.client.ts
 import { browser } from '$app/environment';
 import type { HandleFetch } from '@sveltejs/kit';
+import { refreshToken } from './routes/auth/data.remote';
 
 // Helper to get a cookie
 function getCookie(name: string): string | undefined {
@@ -24,13 +25,11 @@ export const handleFetch: HandleFetch = async ({ request, fetch }) => {
 	// Check if the token expired (401 status)
 	if (response.status === 401) {
 		// The token is expired or invalid. Let's try to refresh it.
-		const refreshResponse = await fetch('/api/refresh-token', {
-			method: 'POST',
-		});
+		const refreshResponse = await refreshToken();
 
-		if (refreshResponse.ok) {
-			const { newAuthToken } = await refreshResponse.json();
-			tokenInMemory = newAuthToken; // Update the in-memory token
+		if (refreshResponse.success) {
+			const { authToken } = refreshResponse;
+			tokenInMemory = authToken; // Update the in-memory token
 
 			// IMPORTANT: Clone the original request to retry it.
 			// Set the new token and resend the original request.

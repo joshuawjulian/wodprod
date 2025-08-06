@@ -3,6 +3,7 @@
 	// It uses tabs to switch between login and signup forms.
 	// The forms are styled with Tailwind CSS classes.
 	const { loginAction, registerAction } = $props();
+	import { registerNewUser } from '../routes/auth/data.remote';
 </script>
 
 <div class="tabs tabs-border min-w-96">
@@ -16,7 +17,7 @@
 	<div
 		class="tab-content shadow-base-300 shadow border-base-300 bg-base-100 p-10"
 	>
-		<form method="POST" action={loginAction}>
+		<form {...registerNewUser}>
 			<label class="floating-label">
 				<span class="label">Email</span>
 				<input
@@ -50,7 +51,7 @@
 	<div
 		class="tab-content shadow-base-300 shadow border-base-300 bg-base-100 p-10"
 	>
-		<form method="POST" action={registerAction}>
+		<form {...registerNewUser}>
 			<label class="floating-label">
 				<span class="label">Email</span>
 				<input

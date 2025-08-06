@@ -40,12 +40,11 @@ export async function upsertSession(
 }
 
 export async function invalidateSessionByRefreshTokenHash(
-  refreshTokenHash: string,
+	refreshTokenHash: string,
 ): Promise<void> {
-  await sql`
+	await sql`
     UPDATE sessions
     SET is_active = false
     WHERE refresh_token_hash = ${refreshTokenHash};
   `;
 }
-)

@@ -6,6 +6,6 @@
 <div class="absolute left-0 top-0"><ThemeSelector /></div>
 <div class="h-screen flex items-center w-full justify-center">
 	<div class="h-96">
-		<LoginRegister loginAction="?/login" registerAction="?/register" />
+		<LoginRegister />
 	</div>
 </div>
