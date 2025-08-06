@@ -4,7 +4,7 @@ This document outlines a scalable and secure architecture for a SvelteKit applic
 
 ## ---------------- Architecture Diagram ----------------
 
-src/
+````src/
 ├── app.d.ts // Type definitions for App.Locals (e.g., locals.user)
 ├── hooks.client.ts // Manages client-side auth tokens and API call retries
 ├── hooks.server.ts // Validates auth tokens on every server request
@@ -56,7 +56,7 @@ src/
 │ └── +server.ts // Standard API endpoint for token refreshing
 │
 ├── +layout.svelte // Root layout for the entire application
-└── +page.svelte // Public homepage
+└── +page.svelte // Public homepage```
 
 ## ---------------- Component Explanations ----------------
 
@@ -89,3 +89,4 @@ src/
 - **Route Groups `(app)` & `(public)`:** These parentheses denote route groups, which organize your routes without affecting the URL. This is perfect for applying different layouts or logic to sets of pages (e.g., all pages in `(app)` require a user to be logged in).
 - **Remote Functions (`*.remote.ts`):** These are the type-safe "direct lines" from your Svelte components to your server. They act as thin controllers that do minimal work other than calling the appropriate service function from your `services` layer. They are the primary way your UI interacts with the backend.
 - **Standard Endpoint (`api/auth/refresh/+server.ts`):** This is a traditional API endpoint with a fixed URL. It's used for specific, predictable actions that may be called from outside the SvelteKit UI proxy, like the refresh token call from the client hook. For this auth pattern, it's often the only one you need.
+````
