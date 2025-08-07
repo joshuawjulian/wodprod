@@ -44,16 +44,16 @@ This document outlines a scalable and secure architecture for a SvelteKit applic
 │
 ├── (public)/ // Route group for public pages
 │ ├── login/
-│ │ ├── +page.svelte
-│ │ └── login.remote.ts
+│ │   ├── +page.svelte
+│ │   └── login.remote.ts
 │ │
 │ └── register/
-│ └── +page.svelte
+│     └── +page.svelte
 │
 ├── api/
 │ └── auth/
-│ └── refresh/
-│ └── +server.ts // Standard API endpoint for token refreshing
+│     └── refresh/
+│         └── +server.ts // Standard API endpoint for token refreshing
 │
 ├── +layout.svelte // Root layout for the entire application
 └── +page.svelte // Public homepage```

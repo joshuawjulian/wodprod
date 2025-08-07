@@ -185,3 +185,5 @@ export const refreshUserToken = async (userId: number, cookies: Cookies) => {
 		throw new Error(`An internal error occurred. ${err}`);
 	}
 };
+
+export const refreshTokenCookieName = 'refresh_token';

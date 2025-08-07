@@ -2,11 +2,11 @@ import { JWT_SECRET } from '$env/static/private';
 import type { GymRolesAuthType, WebsiteRoleType } from '$lib/db/schema';
 import { sign } from 'jsonwebtoken';
 
-interface AuthTokenPayload {
+export type AuthTokenPayload = {
 	userId: number;
 	websiteRole: WebsiteRoleType;
 	gymRoles: [GymRolesAuthType];
-}
+};
 
 export async function createAuthTokenForUser(userId: number): Promise<string> {
 	// Fetch the user's roles from the database
