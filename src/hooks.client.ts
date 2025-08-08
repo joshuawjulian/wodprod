@@ -1,53 +1,70 @@
-// src/hooks.client.ts
-import { browser } from '$app/environment';
-import type { HandleFetch } from '@sveltejs/kit';
-import { refreshToken } from './routes/auth/data.remote';
+import { authStore, setTokens } from '$lib/client/authStore'; // A custom store for your tokens
+import { type HandleFetch } from '@sveltejs/kit';
+import { get } from 'svelte/store';
 
-// Helper to get a cookie
-function getCookie(name: string): string | undefined {
-	if (!browser) return undefined;
-	const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-	if (match) return match[2];
-}
-
-// Store the token in memory to avoid constant cookie parsing
-let tokenInMemory: string | null = getCookie('auth_token') || null;
+// A flag to prevent an infinite loop if the refresh token call itself fails
+let isRefreshing = false;
 
 export const handleFetch: HandleFetch = async ({ request, fetch }) => {
-	// Add the token to the initial request if it exists
-	if (tokenInMemory) {
-		request.headers.set('Authorization', `Bearer ${tokenInMemory}`);
+	// Get the current access token from your store or localStorage
+	const { accessToken } = get(authStore);
+
+	// Attach the token to the outgoing request's headers
+	if (accessToken) {
+		request.headers.set('Authorization', `Bearer ${accessToken}`);
 	}
 
-	// Make the request
-	const response = await fetch(request);
+	// Make the initial request
+	let response = await fetch(request);
 
-	// Check if the token expired (401 status)
-	if (response.status === 401) {
-		// The token is expired or invalid. Let's try to refresh it.
-		const refreshResponse = await refreshToken();
+	// Check if the request failed because the token expired (HTTP 401)
+	// Also check that we're not already in the middle of refreshing the token
+	if (response.status === 401 && !isRefreshing) {
+		isRefreshing = true;
 
-		if (refreshResponse.success) {
-			const { authToken } = refreshResponse;
-			tokenInMemory = authToken; // Update the in-memory token
+		// The token expired. Let's try to refresh it.
+		const { refreshToken } = get(authStore);
 
-			// IMPORTANT: Clone the original request to retry it.
-			// Set the new token and resend the original request.
-			const retryRequest = new Request(request.url, {
-				method: request.method,
-				headers: request.headers,
-				body: request.body,
-				// ... and other options
-			});
-			retryRequest.headers.set('Authorization', `Bearer ${tokenInMemory}`);
+		if (refreshToken) {
+			try {
+				// IMPORTANT: Use the original, un-hooked `fetch` for the refresh call
+				// to avoid an infinite loop of 401s if the refresh token is also invalid.
+				const refreshResponse = await window.fetch('/api/auth/refresh', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ refreshToken }),
+				});
 
-			console.log('Token refreshed, retrying original request...');
-			return fetch(retryRequest);
-		} else {
-			// Refresh failed, log the user out
-			tokenInMemory = null;
-			// You might want to redirect to /login here
-			window.location.href = '/login';
+				if (refreshResponse.ok) {
+					console.log('Token refreshed successfully.');
+					const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+						await refreshResponse.json();
+
+					// Update your store/localStorage with the new tokens
+					setTokens({
+						accessToken: newAccessToken,
+						refreshToken: newRefreshToken,
+					});
+
+					// Clone the original request and retry it with the new access token
+					const retryRequest = new Request(request);
+					retryRequest.headers.set('Authorization', `Bearer ${newAccessToken}`);
+
+					console.log('Retrying the original request...');
+					response = await fetch(retryRequest); // Use the hooked fetch for the retry
+				} else {
+					// Refresh failed, log the user out
+					console.error('Failed to refresh token. Logging out.');
+					setTokens({ accessToken: null, refreshToken: null });
+					// Optionally redirect to the login page
+					window.location.href = '/login';
+				}
+			} catch (e) {
+				console.error('Error during token refresh:', e);
+				setTokens({ accessToken: null, refreshToken: null });
+			} finally {
+				isRefreshing = false;
+			}
 		}
 	}
 
