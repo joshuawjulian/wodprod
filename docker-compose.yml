@@ -1,0 +1,48 @@
+# docker-compose.yml
+services:
+  # The Bun application service
+  app:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+      
+    container_name: bun_app
+
+    # Mounts your local code into the container at /workspace
+    volumes:
+      - .:/workspace:cached
+
+    # A command to keep the container running so VS Code can attach
+    command: sleep infinity
+
+    # Tells this service to wait for the 'db' service to be healthy before starting
+    depends_on:
+      db:
+        condition: service_healthy
+    
+    # Loads environment variables from a .env file for database connection
+    env_file: .env
+
+  # The PostgreSQL database service
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    restart: unless-stopped
+    
+    # Persists database data on your local machine in a named volume
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    
+    # Loads database credentials from the .env file
+    env_file: .env
+
+    # Checks to ensure the database is ready to accept connections
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# Defines the named volume for data persistence
+volumes:
+  postgres-data:

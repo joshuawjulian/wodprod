@@ -1,0 +1,32 @@
+// .devcontainer/devcontainer.json
+{
+  "name": "Bun & PostgreSQL",
+
+  // Tells VS Code to use your Docker Compose file
+  "dockerComposeFile": "../docker-compose.yml",
+
+  // Specifies which service VS Code should attach to
+  "service": "app",
+
+  // Sets the default folder to open inside the container
+  "workspaceFolder": "/workspace",
+
+  // --- Quality of Life Improvements ---
+
+  // Automatically run 'bun install' after the container is created
+  "postCreateCommand": "bun install",
+
+  // Forward ports to access your app and database from your local machine
+  "forwardPorts": [3000, 5432, 5173],
+
+  // Install useful VS Code extensions inside the container
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "oven.bun-vscode",
+        "esbenp.prettier-vscode",
+        "ms-postgresql.pgdatabase"
+      ]
+    }
+  }
+}
