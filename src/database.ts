@@ -5,10 +5,10 @@ import type { Database } from './databaseTypes'; // this is the Database interfa
 
 const dialect = new PostgresDialect({
 	pool: new Pool({
-		database: process.env.POSTGRES_DB,
-		host: process.env.POSTGRES_HOST,
-		user: process.env.POSTGRES_USER,
-		password: process.env.POSTGRES_PASSWORD,
+		database: process.env.PGDATABASE,
+		host: process.env.PGHOST,
+		user: process.env.PGUSER,
+		password: process.env.PGPASSWORD,
 		port: 5432,
 		max: 10
 	})
