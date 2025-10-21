@@ -13,6 +13,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn('created_at', 'timestamptz', (col) =>
 			col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
 		)
+		.addColumn('refresh_token', 'varchar(255)', (col) => col.defaultTo(null))
 		.execute();
 
 	await db.schema.createIndex('idx_user_email').on('user').column('email').execute();
@@ -42,6 +43,7 @@ export async function down(db: Kysely<any>): Promise<void> {
 	// down migration code goes here...
 	// note: down migrations are optional. you can safely delete this function.
 	// For more info, see: https://kysely.dev/docs/migrations
+	await db.schema.dropTable('user_website_role').execute();
 	await db.schema.dropTable('user').execute();
 	await db.schema.dropTable('website_role').execute();
 	await db.schema.dropTable('gym_role').execute();
