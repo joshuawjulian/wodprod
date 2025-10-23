@@ -1,10 +1,9 @@
-# docker-compose.yml
 services:
-  # The Bun application service
+# The Bun application service
   app:
     build:
       context: .
-      dockerfile: .devcontainer/Dockerfile
+      dockerfile: .devcontainer/Dockerfile.dev
       
     container_name: bun_app
 
@@ -26,7 +25,7 @@ services:
   # The PostgreSQL database service
   db:
     image: postgres:latest
-    container_name: postgres_db
+    container_name: ${POSTGRES_HOST}
     restart: unless-stopped
     
     # Persists database data on your local machine in a named volume

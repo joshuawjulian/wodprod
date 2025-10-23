@@ -1,32 +1,31 @@
-// .devcontainer/devcontainer.json
 {
-  "name": "Bun & PostgreSQL",
-
-  // Tells VS Code to use your Docker Compose file
+  "name": "SvelteKit + Postgres",
   "dockerComposeFile": "../docker-compose.yml",
-
-  // Specifies which service VS Code should attach to
   "service": "app",
-
-  // Sets the default folder to open inside the container
   "workspaceFolder": "/workspace",
 
-  // --- Quality of Life Improvements ---
-
-  // Automatically run 'bun install' after the container is created
-  "postCreateCommand": "bun install",
-
-  // Forward ports to access your app and database from your local machine
-  "forwardPorts": [3000, 5432, 5173],
-
-  // Install useful VS Code extensions inside the container
   "customizations": {
     "vscode": {
       "extensions": [
+        "svelte.svelte-vscode",
+        "bradlc.vscode-tailwindcss",
+        "dbaeumer.vscode-eslint",
         "oven.bun-vscode",
-        "esbenp.prettier-vscode",
-        "ms-postgresql.pgdatabase"
-      ]
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        }
+      }
     }
-  }
+  },
+
+
+  "forwardPorts": [5173, 5432, 3000],
+  "postCreateCommand": "bun install",
+  "remoteUser": "bun"
 }
