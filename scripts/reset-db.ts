@@ -1,4 +1,5 @@
 import { sql } from '../src/lib/server/db/index';
+import { seedDb } from './seed-db';
 
 async function resetDatabase() {
 	console.log('🔄 Resetting database...');
@@ -8,7 +9,13 @@ async function resetDatabase() {
 		await sql`DROP SCHEMA IF EXISTS public CASCADE`;
 		await sql`CREATE SCHEMA public`;
 
-		// Create tables
+		await sql`
+			CREATE TABLE website_roles (
+				id SERIAL PRIMARY KEY,
+				name VARCHAR(255) NOT NULL	
+			)
+		`;
+
 		await sql`
       CREATE TABLE users (
         id SERIAL PRIMARY KEY,
@@ -21,28 +28,18 @@ async function resetDatabase() {
     `;
 
 		await sql`
-      CREATE TABLE sessions (
-        id TEXT PRIMARY KEY,
-        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-        expires_at TIMESTAMPTZ NOT NULL,
-        created_at TIMESTAMPTZ DEFAULT NOW()
-      )
-    `;
+			CREATE TABLE users_website_roles (
+				id SERIAL PRIMARY KEY,
+				user_id INTEGER REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
+				website_role_id INTEGER REFERENCES website_roles(id) NOT NULL
+			)
+		`
 
-		// Create indexes
-		await sql`CREATE INDEX idx_sessions_user_id ON sessions(user_id)`;
-		await sql`CREATE INDEX idx_sessions_expires_at ON sessions(expires_at)`;
 
 		console.log('✅ Tables created');
-
-		// Seed data
-		await sql`
-      INSERT INTO users (email, password_hash) VALUES
-        ('dev@example.com', '$2a$10$placeholder_hash_1'),
-        ('admin@example.com', '$2a$10$placeholder_hash_2')
-    `;
-
-		console.log('✅ Seed data inserted');
+		console.log('🔄 Seeding database...');
+		await seedDb();
+		console.log('✅ Seeding Complete');
 		console.log('✅ Database reset complete');
 	} catch (error) {
 		console.error('❌ Database reset failed:', error);
