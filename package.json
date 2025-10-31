@@ -32,10 +32,12 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint ."
+		"lint": "prettier --check . && eslint .",
+		"migrate": "node-pg-migrate"
 	},
 	"type": "module",
 	"dependencies": {
-		"argon2": "^0.44.0"
+		"argon2": "^0.44.0",
+		"node-pg-migrate": "^8.0.3"
 	}
 }
