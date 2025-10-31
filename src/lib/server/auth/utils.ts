@@ -1,5 +1,8 @@
 import argon2 from 'argon2';
+import * as crypto from 'crypto';
 import { Err, Ok, type Result } from 'ts-results';
+
+//const secretKey = process.env.AUTH_SECRET;
 
 export async function hashPassword(
 	password: string
@@ -28,4 +31,9 @@ export async function verifyPassword(
 		}
 		return Err(new Error('An unknown error occurred'));
 	}
+}
+
+export function generateRefreshToken(length: number = 32): string {
+	const randomBytes = crypto.randomBytes(length);
+	return randomBytes.toString('base64');
 }
