@@ -4,12 +4,14 @@ services:
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile.dev
+    
+    user: bun 
       
     container_name: bun_app
 
     # Mounts your local code into the container at /workspace
     volumes:
-      - .:/workspace:cached
+      - .:/workspace
 
     # A command to keep the container running so VS Code can attach
     command: sleep infinity
