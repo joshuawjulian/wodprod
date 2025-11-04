@@ -30,8 +30,7 @@ CREATE TABLE "users" (
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
-CREATE TABLE "user_website_roles" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "user_website_roles_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+CREATE TABLE "users_website_roles" (
 	"user_id" integer NOT NULL,
 	"role_id" integer NOT NULL,
 	"assigned_at" date DEFAULT now() NOT NULL
@@ -39,11 +38,11 @@ CREATE TABLE "user_website_roles" (
 --> statement-breakpoint
 CREATE TABLE "website_roles" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "website_roles_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
-	"role_name" varchar(100) NOT NULL,
-	CONSTRAINT "website_roles_role_name_unique" UNIQUE("role_name")
+	"name" varchar(100) NOT NULL,
+	CONSTRAINT "website_roles_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
 ALTER TABLE "movements_movement_patterns" ADD CONSTRAINT "movements_movement_patterns_movement_id_movements_id_fk" FOREIGN KEY ("movement_id") REFERENCES "public"."movements"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "movements_movement_patterns" ADD CONSTRAINT "movements_movement_patterns_movement_pattern_id_movement_patterns_id_fk" FOREIGN KEY ("movement_pattern_id") REFERENCES "public"."movement_patterns"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "user_website_roles" ADD CONSTRAINT "user_website_roles_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "user_website_roles" ADD CONSTRAINT "user_website_roles_role_id_website_roles_id_fk" FOREIGN KEY ("role_id") REFERENCES "public"."website_roles"("id") ON DELETE no action ON UPDATE no action;
+ALTER TABLE "users_website_roles" ADD CONSTRAINT "users_website_roles_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "users_website_roles" ADD CONSTRAINT "users_website_roles_role_id_website_roles_id_fk" FOREIGN KEY ("role_id") REFERENCES "public"."website_roles"("id") ON DELETE cascade ON UPDATE no action;

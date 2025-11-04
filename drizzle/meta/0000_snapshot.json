@@ -1,5 +1,5 @@
 {
-  "id": "96df49f2-ea48-47a6-a3fb-b846765be426",
+  "id": "5633f561-ca33-4ac9-a0e2-086a7f08bc76",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -256,27 +256,10 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.user_website_roles": {
-      "name": "user_website_roles",
+    "public.users_website_roles": {
+      "name": "users_website_roles",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "always",
-            "name": "user_website_roles_id_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "2147483647",
-            "cache": "1",
-            "cycle": false
-          }
-        },
         "user_id": {
           "name": "user_id",
           "type": "integer",
@@ -299,9 +282,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "user_website_roles_user_id_users_id_fk": {
-          "name": "user_website_roles_user_id_users_id_fk",
-          "tableFrom": "user_website_roles",
+        "users_website_roles_user_id_users_id_fk": {
+          "name": "users_website_roles_user_id_users_id_fk",
+          "tableFrom": "users_website_roles",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
@@ -309,12 +292,12 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "user_website_roles_role_id_website_roles_id_fk": {
-          "name": "user_website_roles_role_id_website_roles_id_fk",
-          "tableFrom": "user_website_roles",
+        "users_website_roles_role_id_website_roles_id_fk": {
+          "name": "users_website_roles_role_id_website_roles_id_fk",
+          "tableFrom": "users_website_roles",
           "tableTo": "website_roles",
           "columnsFrom": [
             "role_id"
@@ -322,7 +305,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -353,8 +336,8 @@
             "cycle": false
           }
         },
-        "role_name": {
-          "name": "role_name",
+        "name": {
+          "name": "name",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
@@ -364,11 +347,11 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "website_roles_role_name_unique": {
-          "name": "website_roles_role_name_unique",
+        "website_roles_name_unique": {
+          "name": "website_roles_name_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "role_name"
+            "name"
           ]
         }
       },
