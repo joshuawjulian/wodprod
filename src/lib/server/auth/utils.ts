@@ -1,6 +1,8 @@
+import type { Cookies } from '@sveltejs/kit';
 import argon2 from 'argon2';
 import * as crypto from 'crypto';
 import { Err, Ok, type Result } from 'ts-results';
+import { db } from '../db';
 
 //const secretKey = process.env.AUTH_SECRET;
 
@@ -32,6 +34,14 @@ export async function verifyPassword(
 		return Err(new Error('An unknown error occurred'));
 	}
 }
+
+export const createAndSetTokens = async (
+	email: string,
+	cookies: Cookies
+): Promise<Result<boolean, Error>> => {
+	await db.transaction((tx) => {});
+	return Ok(true);
+};
 
 export function generateRefreshToken(length: number = 32): string {
 	const randomBytes = crypto.randomBytes(length);

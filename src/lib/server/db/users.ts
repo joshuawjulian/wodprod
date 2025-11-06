@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { Err, Ok, type Result } from 'ts-results';
 import { type DBTRXType } from '.';
-import { hashPassword } from '../auth/utils';
+import { hashPassword, verifyPassword } from '../auth/utils';
 import {
 	usersTable,
 	usersWebsiteRolesTable,
@@ -16,6 +16,7 @@ export type UserSelectType = {
 	createdAt: string;
 	updatedAt: string;
 };
+
 export const getUserByEmail = async (
 	db: DBTRXType,
 	email: string
@@ -69,4 +70,23 @@ export const registerUser = async (
 
 		return Ok(user);
 	});
+};
+
+export const verifyLogin = async (
+	db: DBTRXType,
+	email: string,
+	passwordRaw: string
+): Promise<Result<UserSelectType, Error>> => {
+	const userByEmailResult = await getUserByEmail(db, email);
+	if (userByEmailResult.err)
+		return Err(Error('User/Password Combo is not correct'));
+	const userByEmail = userByEmailResult.val;
+	const passwordResult = await verifyPassword(
+		userByEmail.passwordHash,
+		passwordRaw
+	);
+	if (passwordResult.err)
+		return Err(Error('User/Password Combo is not correct'));
+
+	return Ok(userByEmail);
 };
