@@ -1,12 +1,13 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
+
+import type { UserPayloadType } from '$lib/types';
+
 // for information about these interfaces
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user: null | {
-				email: string;
-			};
+			user: UserPayloadType | null;
 		}
 		// interface PageData {}
 		// interface PageState {}
