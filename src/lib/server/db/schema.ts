@@ -10,10 +10,21 @@ export const usersTable = pgTable('users', {
 	updatedAt: date('updated_at').notNull().defaultNow()
 });
 
+export const usersRelations = relations(usersTable, ({ many }) => ({
+	usersToWebsiteRoles: many(usersWebsiteRolesTable)
+}));
+
 export const websiteRolesTable = pgTable('website_roles', {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 	name: varchar({ length: 100 }).notNull().unique()
 });
+
+export const websiteRolesRelations = relations(
+	websiteRolesTable,
+	({ many }) => ({
+		usersToWebsiteRoles: many(usersWebsiteRolesTable)
+	})
+);
 
 export const usersWebsiteRolesTable = pgTable(
 	'users_website_roles',
@@ -27,17 +38,6 @@ export const usersWebsiteRolesTable = pgTable(
 		assigned_at: date().notNull().defaultNow()
 	},
 	(t) => [unique().on(t.userId, t.roleId)]
-);
-
-export const usersRelations = relations(usersTable, ({ many }) => ({
-	usersToWebsiteRoles: many(usersWebsiteRolesTable)
-}));
-
-export const websiteRolesRelations = relations(
-	websiteRolesTable,
-	({ many }) => ({
-		usersToWebsiteRoles: many(usersWebsiteRolesTable)
-	})
 );
 
 export const usersWebsiteRolesRelations = relations(
@@ -60,6 +60,13 @@ export const movementPatternsTable = pgTable('movement_patterns', {
 	description: varchar({ length: 500 })
 });
 
+export const movementPatternsRelations = relations(
+	movementPatternsTable,
+	({ many }) => ({
+		movementPatterns: many(movementsMovementPatternsTable)
+	})
+);
+
 export const movementsTable = pgTable('movements', {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 	name: varchar({ length: 100 }).notNull().unique(),
@@ -67,15 +74,33 @@ export const movementsTable = pgTable('movements', {
 	standards: varchar({ length: 1000 }).notNull()
 });
 
+export const movementsRelations = relations(movementsTable, ({ many }) => ({
+	movementPatterns: many(movementsMovementPatternsTable)
+}));
+
 export const movementsMovementPatternsTable = pgTable(
 	'movements_movement_patterns',
 	{
-		id: integer().primaryKey().generatedAlwaysAsIdentity(),
 		movementId: integer('movement_id')
 			.notNull()
 			.references(() => movementsTable.id),
 		movementPatternId: integer('movement_pattern_id')
 			.notNull()
 			.references(() => movementPatternsTable.id)
-	}
+	},
+	(t) => [unique().on(t.movementId, t.movementPatternId)]
+);
+
+export const movementsMovementPatternsRelations = relations(
+	movementsMovementPatternsTable,
+	({ one }) => ({
+		movement: one(movementsTable, {
+			fields: [movementsMovementPatternsTable.movementId],
+			references: [movementsTable.id]
+		}),
+		movementPattern: one(movementPatternsTable, {
+			fields: [movementsMovementPatternsTable.movementPatternId],
+			references: [movementPatternsTable.id]
+		})
+	})
 );

@@ -15,6 +15,13 @@
       "when": 1762278398708,
       "tag": "0001_bumpy_firebird",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1762462488905,
+      "tag": "0002_supreme_rumiko_fujikawa",
+      "breakpoints": true
     }
   ]
 }
