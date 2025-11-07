@@ -1,17 +1,55 @@
-import { relations } from 'drizzle-orm';
-import { date, integer, pgTable, unique, varchar } from 'drizzle-orm/pg-core';
+import { eq, relations } from 'drizzle-orm';
+import {
+	boolean,
+	date,
+	integer,
+	pgTable,
+	unique,
+	uniqueIndex,
+	varchar
+} from 'drizzle-orm/pg-core';
 
 export const usersTable = pgTable('users', {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 	email: varchar({ length: 255 }).notNull().unique(),
 	passwordHash: varchar('password_hash', { length: 255 }).notNull(),
-	refreshToken: varchar('refresh_token', { length: 255 }),
+	//refreshToken: varchar('refresh_token', { length: 255 }),
 	createdAt: date('created_at').notNull().defaultNow(),
 	updatedAt: date('updated_at').notNull().defaultNow()
 });
 
+export const refreshTokensTable = pgTable(
+	'refresh_tokens',
+	{
+		id: integer().primaryKey().generatedAlwaysAsIdentity(),
+		userId: integer()
+			.notNull()
+			.references(() => usersTable.id),
+		token: varchar().notNull(),
+		isActive: boolean('is_active').notNull().default(true),
+		createdAt: date('created_at').notNull().defaultNow(),
+		expiresAt: date('expires_at').notNull()
+	},
+	(t) => [
+		uniqueIndex('one_active_refresh_token_per_user')
+			.on(t.userId)
+			.where(eq(t.isActive, true))
+	]
+);
+
+export const refreshTokensRelations = relations(
+	refreshTokensTable,
+	({ one }) => ({
+		user: one(usersTable, {
+			fields: [refreshTokensTable.userId],
+			references: [usersTable.id]
+		})
+	})
+);
+
 export const usersRelations = relations(usersTable, ({ many }) => ({
-	usersToWebsiteRoles: many(usersWebsiteRolesTable)
+	websiteRoles: many(usersWebsiteRolesTable),
+	refreshTokens: many(refreshTokensTable)
 }));
 
 export const websiteRolesTable = pgTable('website_roles', {
@@ -22,7 +60,7 @@ export const websiteRolesTable = pgTable('website_roles', {
 export const websiteRolesRelations = relations(
 	websiteRolesTable,
 	({ many }) => ({
-		usersToWebsiteRoles: many(usersWebsiteRolesTable)
+		users: many(usersWebsiteRolesTable)
 	})
 );
 
@@ -37,7 +75,7 @@ export const usersWebsiteRolesTable = pgTable(
 			.references(() => websiteRolesTable.id, { onDelete: 'cascade' }),
 		assigned_at: date().notNull().defaultNow()
 	},
-	(t) => [unique().on(t.userId, t.roleId)]
+	(t) => [unique('one_website_role_per_user').on(t.userId, t.roleId)]
 );
 
 export const usersWebsiteRolesRelations = relations(

@@ -12,7 +12,6 @@ export type UserSelectType = {
 	id: number;
 	email: string;
 	passwordHash: string;
-	refreshToken: string | null;
 	createdAt: string;
 	updatedAt: string;
 };
