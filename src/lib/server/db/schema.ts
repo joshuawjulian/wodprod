@@ -1,4 +1,4 @@
-import { eq, relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import {
 	boolean,
 	date,
@@ -35,7 +35,7 @@ export const refreshTokensTable = pgTable(
 	(t) => [
 		uniqueIndex('one_active_refresh_token_per_user')
 			.on(t.userId)
-			.where(eq(t.isActive, true))
+			.where(sql`${t.isActive} = true`)
 	]
 );
 

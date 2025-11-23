@@ -1,2 +1,0 @@
-ALTER TABLE "movements_movement_patterns" DROP COLUMN "id";--> statement-breakpoint
-ALTER TABLE "movements_movement_patterns" ADD CONSTRAINT "movements_movement_patterns_movement_id_movement_pattern_id_unique" UNIQUE("movement_id","movement_pattern_id");

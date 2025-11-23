@@ -43,7 +43,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
-		"migrate": "node-pg-migrate -j ts"
+		"migrate": "node-pg-migrate -j ts",
+		"db:nuke": "rm -rf drizzle && bun src/reset-db.ts && bun drizzle-kit generate && bun drizzle-kit migrate"
 	},
 	"type": "module",
 	"dependencies": {
