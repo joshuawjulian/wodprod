@@ -10,7 +10,10 @@ export const envSchema = z.object({
 	POSTGRES_URL: z.string().min(1),
 	DATABASE_URL: z.url(),
 
-	NODE_ENV: z.enum(['development', 'production', 'test']).default('development')
+	NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+
+	BETTER_AUTH_SECRET: z.string().min(32),
+	BETTER_AUTH_URL: z.url()
 });
 
 export type EnvType = z.infer<typeof envSchema>;
