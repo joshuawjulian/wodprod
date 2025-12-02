@@ -1,35 +1,34 @@
 {
-  "name": "SvelteKit + Postgres",
-  "dockerComposeFile": "../docker-compose.yml",
-  "service": "app",
-  "workspaceFolder": "/workspace",
+	"name": "SvelteKit + Postgres",
+	"dockerComposeFile": "../docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspace",
 
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "svelte.svelte-vscode",
-        "bradlc.vscode-tailwindcss",
-        "dbaeumer.vscode-eslint",
-        "oven.bun-vscode",
-        "ms-azuretools.vscode-docker",
-        "esbenp.prettier-vscode"
-      ],
-      "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash",
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": "explicit"
-        }
-      }
-    }
-  },
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"svelte.svelte-vscode",
+				"bradlc.vscode-tailwindcss",
+				"dbaeumer.vscode-eslint",
+				"oven.bun-vscode",
+				"ms-azuretools.vscode-docker",
+				"esbenp.prettier-vscode"
+			],
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash",
+				"editor.formatOnSave": true,
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"editor.codeActionsOnSave": {
+					"source.fixAll.eslint": "explicit"
+				},
+				"[svelte]": {
+					"editor.defaultFormatter": "svelte.svelte-vscode"
+				}
+			}
+		}
+	},
 
-
-  "forwardPorts": [5173, 5432, 3000],
-  "postCreateCommand": "bun install",
-  "remoteUser": "bun",
-  "remoteEnv": {
-    "GEMINI_API_KEY": "${localEnv:GEMINI_API_KEY}"
-  }
+	"forwardPorts": [5173, 5432, 3000],
+	"postCreateCommand": "bun install",
+	"remoteUser": "bun"
 }

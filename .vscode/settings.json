@@ -1,9 +1,0 @@
-  {
-  "workbench.editor.customLabels.enabled": true,
-  "workbench.editor.customLabels.patterns": {
-    "**/+page.svelte": "${dirname}/${filename}",
-    "**/+page.server.ts": "${dirname}/${filename}.${extname}",
-    "**/+page.ts": "${dirname}/${filename}.${extname}",
-    "**/+layout.svelte": "${dirname}/${filename}"
-  }
-}
