@@ -12,7 +12,9 @@ if (building) {
 		POSTGRES_HOST: 'mock',
 		POSTGRES_URL: `postgresql://mock:mock@mock:5432/mock`,
 		DATABASE_URL: `postgresql://mock:mock@mock:5432/mock`,
-		NODE_ENV: 'development'
+		NODE_ENV: 'development',
+		BETTER_AUTH_SECRET: 'mock',
+		BETTER_AUTH_URL: 'https://mock.dev'
 	};
 } else {
 	const parsed = envSchema.safeParse(Bun.env);

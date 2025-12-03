@@ -5,6 +5,8 @@ export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: 'pg' // or "mysql", "sqlite"
 	}),
+	secret: Bun.env.BETTER_AUTH_SECRET, // Access directly
+	baseURL: Bun.env.BETTER_AUTH_URL,
 	emailAndPassword: {
 		enabled: true
 	}

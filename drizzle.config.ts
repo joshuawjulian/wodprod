@@ -13,7 +13,7 @@ if (!parsed.success) {
 const env = parsed.data;
 
 export default defineConfig({
-	schema: './src/lib/server/db/schema.ts', // Adjust to your schema path
+	schema: './src/lib/server/db/schema/index.ts', // Adjust to your schema path
 	out: './drizzle',
 	dialect: 'postgresql',
 	dbCredentials: {
