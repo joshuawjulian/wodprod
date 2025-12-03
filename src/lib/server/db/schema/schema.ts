@@ -5,7 +5,7 @@ import { integer, pgTable, unique, varchar } from 'drizzle-orm/pg-core';
 // --
 
 export const movementPatternsTable = pgTable(
-	'movement_pattern',
+	'movement_patterns',
 	{
 		id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
 		name: varchar('name').notNull(),
