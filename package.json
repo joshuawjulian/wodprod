@@ -22,7 +22,7 @@
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"@typescript-eslint/eslint-plugin": "^8.48.1",
 		"@typescript-eslint/parser": "^8.48.1",
-		"drizzle-kit": "^0.31.7",
+		"drizzle-kit": "^1.0.0-beta.2-86f844e",
 		"eslint": "^9.39.1",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.13.0",

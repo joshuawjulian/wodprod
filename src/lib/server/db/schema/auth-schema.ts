@@ -1,4 +1,3 @@
-import { relations } from 'drizzle-orm';
 import { boolean, index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const usersTable = pgTable('users', {
@@ -70,17 +69,3 @@ export const verificationsTable = pgTable(
 	},
 	(table) => [index('verifications_identifier_idx').on(table.identifier)]
 );
-
-export const sessionsRelations = relations(sessionsTable, ({ one }) => ({
-	usersTables: one(usersTable, {
-		fields: [sessionsTable.userId],
-		references: [usersTable.id]
-	})
-}));
-
-export const accountsRelations = relations(accountsTable, ({ one }) => ({
-	usersTables: one(usersTable, {
-		fields: [accountsTable.userId],
-		references: [usersTable.id]
-	})
-}));
