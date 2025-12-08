@@ -1,19 +1,25 @@
-<form action="/login" method="post">
-	<label for="email">Email:</label>
-	<input type="email" id="email" name="email" required />
+<script lang="ts">
+	import LoginForm from "$lib/components/login-form.svelte";
+	import SignupForm from "$lib/components/signup-form.svelte";
+	import * as Tabs from "$lib/components/ui/tabs/index.js";
 
-	<label for="password">Password:</label>
-	<input type="password" id="password" name="password" required />
+</script>
 
-	<button type="submit">Login</button>
-</form>
+<div class="flex h-screen w-full items-center justify-center px-4">
+	<script lang="ts">
+ import * as Tabs from "$lib/components/ui/tabs/index.js";
+	</script>
 
-<form action="/register" method="post">
-	<label for="email">Email:</label>
-	<input type="email" id="email" name="email" required />
-
-	<label for="password">Password:</label>
-	<input type="password" id="password" name="password" required />
-
-	<button type="submit">Register</button>
-</form>
+	<Tabs.Root value="login" class="w-[400px]">
+		<Tabs.List>
+			<Tabs.Trigger value="login">Login</Tabs.Trigger>
+			<Tabs.Trigger value="register">Register</Tabs.Trigger>
+		</Tabs.List>
+		<Tabs.Content value="login">
+			<LoginForm action="?/login" />
+		</Tabs.Content>
+		<Tabs.Content value="register">
+			<SignupForm action="?/signup" />
+		</Tabs.Content>
+	</Tabs.Root>
+</div>

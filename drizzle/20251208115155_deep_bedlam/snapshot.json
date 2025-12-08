@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "001ada4e-20ef-45ca-ac63-6ebd681d490b",
+  "id": "68ee1f64-322b-45dc-b34f-c11db8a39804",
   "prevIds": [
-    "245b9410-ab62-49d1-8d09-2a3e6253b7e1"
+    "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
     {
@@ -1031,7 +1031,7 @@
       ],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
-      "name": "accounts_user_id_users_id_fk",
+      "name": "accounts_user_id_users_id_fkey",
       "entityType": "fks",
       "schema": "public",
       "table": "accounts"
@@ -1099,7 +1099,7 @@
       ],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
-      "name": "sessions_user_id_users_id_fk",
+      "name": "sessions_user_id_users_id_fkey",
       "entityType": "fks",
       "schema": "public",
       "table": "sessions"
@@ -1276,7 +1276,7 @@
         "token"
       ],
       "nullsNotDistinct": false,
-      "name": "sessions_token_unique",
+      "name": "sessions_token_key",
       "schema": "public",
       "table": "sessions",
       "entityType": "uniques"
@@ -1287,7 +1287,7 @@
         "email"
       ],
       "nullsNotDistinct": false,
-      "name": "users_email_unique",
+      "name": "users_email_key",
       "schema": "public",
       "table": "users",
       "entityType": "uniques"

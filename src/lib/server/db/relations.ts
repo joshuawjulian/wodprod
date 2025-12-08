@@ -23,13 +23,13 @@ export const relations = defineRelations(schema, (r) => ({
 		})
 	},
 	movementsTable: {
-		movementPatterns: r.many.movementsToMovementPatternsTable({
+		movementPatterns: r.many.movementPatternsTable({
 			from: r.movementsTable.id.through(r.movementsToMovementPatternsTable.movementId),
 			to: r.movementPatternsTable.id.through(r.movementsToMovementPatternsTable.movementPatternId)
 		})
 	},
 	movementPatternsTable: {
-		movements: r.many.movementsToMovementPatternsTable({
+		movements: r.many.movementsTable({
 			from: r.movementPatternsTable.id.through(
 				r.movementsToMovementPatternsTable.movementPatternId
 			),
