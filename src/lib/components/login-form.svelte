@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
-	import { Field, FieldDescription, FieldGroup, FieldLabel } from '$lib/components/ui/field';
+	import { Field, FieldGroup, FieldLabel } from '$lib/components/ui/field';
 	import { Input } from '$lib/components/ui/input';
 	const id = $props.id();
-  const {action} = $props();
+	const { action } = $props();
 </script>
 
 <Card.Root class="mx-auto w-full max-w-sm">
@@ -28,9 +28,6 @@
 				</Field>
 				<Field>
 					<Button type="submit" class="w-full">Login</Button>
-					<FieldDescription class="text-center">
-						Don't have an account? <a href="/register">Sign up</a>
-					</FieldDescription>
 				</Field>
 			</FieldGroup>
 		</form>
