@@ -16,7 +16,7 @@
 		<form {action} method="POST">
 			<FieldGroup>
 				<Field>
-					<FieldLabel for="email-{id}">Email</FieldLabel>
+					<FieldLabel for="email">Email</FieldLabel>
 					<Input id="email-{id}" type="email" placeholder="m@example.com" name="email" required />
 				</Field>
 				<Field>

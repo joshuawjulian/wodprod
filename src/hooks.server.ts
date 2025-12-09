@@ -9,14 +9,18 @@ export async function init() {
 }
 
 export async function handle({ event, resolve }) {
-	// Fetch current session from Better Auth
+	// 1. Hand off auth requests immediately (Sign in, Sign up, etc)
+	if (event.url.pathname.startsWith('/api/auth')) {
+		return svelteKitHandler({ event, resolve, auth, building });
+	}
+
+	// 2. Fetch session only for app routes
 	const session = await auth.api.getSession({
 		headers: event.request.headers
 	});
-	// Make session and user available on server
-	if (session) {
-		event.locals.session = session.session;
-		event.locals.user = session.user;
-	}
-	return svelteKitHandler({ event, resolve, auth, building });
+
+	event.locals.session = session?.session || null;
+	event.locals.user = session?.user || null;
+
+	return resolve(event);
 }

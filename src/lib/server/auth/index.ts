@@ -1,10 +1,8 @@
-import { getRequestEvent } from '$app/server';
 import { db, type DbTxType } from '$lib/server/db';
 import { env } from '$lib/server/env/cli';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { customSession } from 'better-auth/plugins';
-import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { sql } from 'drizzle-orm';
 import {
 	accountsTable,
@@ -46,7 +44,8 @@ export const auth = betterAuth({
 		}
 	}),
 	secret: env.BETTER_AUTH_SECRET, // Access directly
-	baseURL: env.BETTER_AUTH_URL,
+	baseURL: 'http://localhost:5173', //env.BETTER_AUTH_URL,
+	trustedOrigins: ['http://localhost:5173'],
 	emailAndPassword: {
 		enabled: true
 	},
@@ -61,7 +60,6 @@ export const auth = betterAuth({
 		}
 	},
 	plugins: [
-		sveltekitCookies(getRequestEvent),
 		customSession(async ({ user, session }) => {
 			// Add custom data to session object
 			const websiteRole = await getWebsiteRole(db, user.id);
