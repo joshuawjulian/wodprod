@@ -14,7 +14,7 @@ import {
 } from '../db/schema';
 
 const getWebsiteRole = async (ctx: DbTxType, userId: string) => {
-	const userWithRole = await db.query.usersTable.findFirst({
+	const userWithRole = await ctx.query.usersTable.findFirst({
 		where: { id: userId },
 		with: {
 			websiteRoles: {
@@ -26,8 +26,9 @@ const getWebsiteRole = async (ctx: DbTxType, userId: string) => {
 };
 
 const newUserToRole = async (ctx: DbTxType, userId: string, role: string = 'user') => {
+	console.log(`------- NEW USER TO ROLE ---------`);
 	const websiteRoleSQL = sql`(select ${websiteRolesTable.id} from ${websiteRolesTable} where ${websiteRolesTable.name} = ${role} limit 1)`;
-	await db.insert(usersToWebsiteRolesTable).values({
+	await ctx.insert(usersToWebsiteRolesTable).values({
 		userId: userId,
 		websiteRoleId: websiteRoleSQL
 	});
@@ -44,7 +45,7 @@ export const auth = betterAuth({
 		}
 	}),
 	secret: env.BETTER_AUTH_SECRET, // Access directly
-	baseURL: 'http://localhost:5173', //env.BETTER_AUTH_URL,
+	baseURL: env.BETTER_AUTH_URL, //env.BETTER_AUTH_URL,
 	trustedOrigins: ['http://localhost:5173'],
 	emailAndPassword: {
 		enabled: true

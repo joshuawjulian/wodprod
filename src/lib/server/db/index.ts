@@ -3,15 +3,11 @@ import { relations } from './relations';
 import * as schema from './schema';
 // 1. Import Schema Only
 import { envSchema } from '$lib/server/env/env-schema';
-import postgres from 'postgres';
 
 // 2. Parse manually (or just access Bun.env if you are lazy, but parsing is safer)
 const env = envSchema.parse(Bun.env);
 
-const queryClient = postgres(env.DATABASE_URL);
-
-export const db = drizzle({
-	client: queryClient,
+export const db = drizzle(env.DATABASE_URL, {
 	casing: 'snake_case',
 	schema: schema,
 	relations: relations

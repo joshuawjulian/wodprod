@@ -7,7 +7,11 @@
 	import { Input } from '$lib/components/ui/input';
 	import * as Tabs from '$lib/components/ui/tabs/';
 	import { toast, Toaster } from 'svelte-sonner';
+	import type { PageProps } from './$types';
 	const session = authClient.useSession();
+
+	let { data }: PageProps = $props();
+	const emails = data.users.map((user) => user.email);
 
 	let email = $state('');
 	let password = $state('');
@@ -172,6 +176,9 @@
 			</Card.Root>
 		</Tabs.Content>
 	</Tabs.Root>
+	<div>
+		<pre>Emails: {emails}</pre>
+	</div>
 	<div>
 		{#if $session.data}
 			<div>
