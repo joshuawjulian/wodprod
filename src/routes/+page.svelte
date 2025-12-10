@@ -11,7 +11,7 @@
 	const session = authClient.useSession();
 
 	let { data }: PageProps = $props();
-	const emails = data.users.map((user) => user.email);
+	const emails = $derived(data.users.map((user) => user.email));
 
 	let email = $state('');
 	let password = $state('');
