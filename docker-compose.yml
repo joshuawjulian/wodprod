@@ -1,12 +1,12 @@
 services:
-# The Bun application service
+  # The Bun application service
   app:
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile.dev
-    
-    user: bun 
-      
+
+    user: bun
+
     container_name: bun_app
 
     # Mounts your local code into the container at /workspace
@@ -20,7 +20,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    
+
     # Loads environment variables from a .env file for database connection
     env_file: .env
 
@@ -29,17 +29,17 @@ services:
     image: postgres:latest
     container_name: ${POSTGRES_HOST}
     restart: unless-stopped
-    
+
     # Persists database data on your local machine in a named volume
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-    
+      - ./postgres_data:/var/lib/postgresql
+
     # Loads database credentials from the .env file
     env_file: .env
 
     # Checks to ensure the database is ready to accept connections
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
       interval: 10s
       timeout: 5s
       retries: 5
