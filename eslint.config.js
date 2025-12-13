@@ -1,7 +1,8 @@
 import js from '@eslint/js';
-import prettier from 'eslint-config-prettier';
+import prettier, { rules } from 'eslint-config-prettier';
 import svelte from 'eslint-plugin-svelte';
 import globals from 'globals';
+import unusedImports from 'eslint-plugin-unused-imports';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -14,6 +15,14 @@ export default [
 				...globals.browser,
 				...globals.node
 			}
+		},
+		rules: {
+			'no-unused-vars': 'off', // Disable standard rule
+			'unused-imports/no-unused-imports': 'error',
+			'unused-imports/no-unused-vars': [
+				'warn',
+				{ vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }
+			]
 		}
 	},
 	{
