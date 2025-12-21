@@ -9,51 +9,51 @@ await db.insert(movementPatternsTable).values([
 	{
 		name: 'Squat',
 		description:
-			'A lower-body movement characterized by flexing at the hips and knees to lower the center of mass, keeping the chest upright. This is a fundamental pattern for building leg strength, power, and mobility, forming the base for Olympic lifts and safe landing mechanics.'
+			'Bilateral hip and knee flexion where the torso remains relatively upright. This covers heavy loading (Back Squat), high-repetition endurance (Air Squat), and jumping mechanics (Box Jump) where landing absorbs force in this pattern.'
 	},
 	{
 		name: 'Hinge',
 		description:
-			'A closed-chain movement of hinging at the hips, moving the glutes backward while maintaining a neutral spine. This is the primary pattern for powerfully activating the posterior chain (glutes, hamstrings, lower back) and is essential for lifting heavy objects from the ground.'
+			'Hip-dominant movement with minimal knee flexion, loading the posterior chain (glutes/hamstrings). This includes heavy static lifts (Deadlift) and explosive hip extension movements (Kettlebell Swing, Power Clean initiation).'
 	},
 	{
 		name: 'Lunge',
 		description:
-			'A unilateral (single-leg) lower-body movement that involves stepping in a direction and lowering the hips. This pattern is critical for developing single-leg strength, balance, and stability, which translates directly to running, climbing, and change-of-direction.'
+			'Unilateral knee and hip flexion. This pattern targets imbalances and stability. It encompasses static split squats, dynamic walking lunges, and step-ups.'
 	},
 	{
 		name: 'Push (Horizontal)',
 		description:
-			'Pushing a load (or your bodyweight) away from your chest in a plane parallel to the ground. This movement develops the pectoral muscles, shoulders, and triceps, forming the basis of pressing strength.'
+			'Moving a load away from the chest perpendicular to the torso. This includes fixed path movements (Bench Press) and bodyweight progressions (Push-up, Burpee ground-phase).'
 	},
 	{
 		name: 'Push (Vertical)',
 		description:
-			'Pushing a load (or your bodyweight) vertically overhead. This pattern is fundamental for building shoulder strength and stability, and it is a key component of Olympic weightlifting (the jerk) and gymnastics (the handstand).'
+			'Moving a load vertically overhead relative to the torso. This covers strict pressing strength (Military Press), dynamic overhead stability (Handstand), and explosive overhead drive (Push Jerk, Thruster extension).'
 	},
 	{
 		name: 'Pull (Horizontal)',
 		description:
-			'Pulling a load (or your bodyweight) towards your torso in a plane parallel to the ground. This movement is key for developing strength and thickness in the mid-back (rhomboids, traps), promoting good posture and balancing horizontal pressing.'
+			'Drawing a load toward the torso perpendicular to the spine. Crucial for scapular retraction and counteracting daily posture issues. Includes rows (Barbell/Dumbbell) and horizontal bodyweight pulling (Ring Row).'
 	},
 	{
 		name: 'Pull (Vertical)',
 		description:
-			'Pulling a load (or your bodyweight) down from an overhead position. This is the primary pattern for developing back width via the latissimus dorsi ("lats") and is a cornerstone of gymnastics.'
+			'Drawing a load down relative to the torso or pulling the body up. This primarily targets the latissimus dorsi. Includes Pull-ups, Rope Climbs, and Lat Pulldowns.'
 	},
 	{
-		name: 'Rotation',
+		name: 'Rotation / Anti-Rotation',
 		description:
-			'Twisting or rotating the torso, often to generate power or resist a rotational force (anti-rotation). This pattern develops a strong, integrated core and is crucial for transferring force in athletic movements.'
+			'Generating or resisting torque through the transverse plane. This covers explosive rotation (Medball Toss) and resisting external rotational forces (Pallof Press, Sandbag holds).'
 	},
 	{
-		name: 'Core (Anterior Flexion)',
+		name: 'Core (Flexion & Stability)',
 		description:
-			'An open-chain movement involving the contraction of the abdominals and hip flexors to bring the legs and torso closer together. Distinct from the hinge, this pattern is foundational for the high-skill gymnastics common in CrossFit.'
+			'Movements focusing on spinal flexion (Toes-to-Bar, GHD Sit-up) or isometric stability against gravity (Plank, L-Sit). Distinct from rotation, this targets the ability to brace and flex the trunk linearly.'
 	},
 	{
-		name: 'Gait / Locomotion',
+		name: 'Gait / Carry',
 		description:
-			'The pattern of transporting your entire body from one point to another. This category encompasses all forms of "travel" and is essential for building work capacity, cardiovascular endurance, and integrating all other strength patterns into dynamic action.'
+			'Locomotion with or without a load. This integrates all patterns into movement over distance. Includes unloaded cyclical work (Run, Bike, Row) and heavy structural loading (Farmer Carry, Yoke Walk).'
 	}
 ]);
