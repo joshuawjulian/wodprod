@@ -20,7 +20,7 @@ export async function handle({ event, resolve }) {
 	});
 
 	event.locals.session = session?.session || null;
-	event.locals.user = session?.user || null;
+	event.locals.user = session?.user || undefined;
 
 	return resolve(event);
 }

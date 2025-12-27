@@ -17,16 +17,30 @@ export const relations = defineRelations(schema, (r) => ({
 	usersTable: {
 		sessions: r.many.sessionsTable(),
 		accounts: r.many.accountsTable(),
-		websiteRoles: r.many.websiteRolesTable({
-			from: r.usersTable.id.through(r.usersToWebsiteRolesTable.userId),
-			to: r.websiteRolesTable.id.through(r.usersToWebsiteRolesTable.websiteRoleId)
+		websiteRole: r.one.websiteRolesTable({
+			from: r.usersTable.websiteRoleId,
+			to: r.websiteRolesTable.id
 		})
 	},
+	websiteRolesTable: {
+		users: r.many.usersTable()
+	},
 	movementsTable: {
+		modality: r.one.modalitiesTable({
+			from: r.movementsTable.modalityId,
+			to: r.modalitiesTable.id
+		}),
 		movementPatterns: r.many.movementPatternsTable({
 			from: r.movementsTable.id.through(r.movementsToMovementPatternsTable.movementId),
 			to: r.movementPatternsTable.id.through(r.movementsToMovementPatternsTable.movementPatternId)
+		}),
+		equipment: r.many.equipmentTable({
+			from: r.movementsTable.id.through(r.equipmentToMovementsTable.movementId),
+			to: r.equipmentTable.id.through(r.equipmentToMovementsTable.equipmentId)
 		})
+	},
+	modalitiesTable: {
+		movements: r.many.movementsTable()
 	},
 	movementPatternsTable: {
 		movements: r.many.movementsTable({
@@ -34,6 +48,12 @@ export const relations = defineRelations(schema, (r) => ({
 				r.movementsToMovementPatternsTable.movementPatternId
 			),
 			to: r.movementsTable.id.through(r.movementsToMovementPatternsTable.movementId)
+		})
+	},
+	equipmentTable: {
+		movements: r.many.movementsTable({
+			from: r.equipmentTable.id.through(r.equipmentToMovementsTable.equipmentId),
+			to: r.movementsTable.id.through(r.equipmentToMovementsTable.movementId)
 		})
 	}
 }));

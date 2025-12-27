@@ -4,10 +4,35 @@ FROM oven/bun:latest
 # You can now add your own RUN commands.
 # For example, to install 'git' and 'unzip':
 RUN apt-get update
-RUN apt-get install -y git
-# Install build tools for native modules (node-gyp)
-RUN apt-get install -y python3 make g++
+RUN apt-get install -y sudo 
+RUN apt-get install -y git 
+RUN apt-get install -y curl 
+RUN apt-get install -y unzip 
+RUN apt-get install -y python3 
+RUN apt-get install -y make 
+RUN apt-get install -y g++ 
 RUN apt-get install -y wget
+RUN rm -rf /var/lib/apt/lists/*
+
+RUN echo "bun ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/bun \
+    && chmod 0440 /etc/sudoers.d/bun
+
+USER bun
+WORKDIR /home/bun
+
+# 4. Install Claude Code Native Binary
+# We pipe to bash. The script detects it's Linux and installs to ~/.local/bin or ~/.claude/bin
+RUN curl -fsSL https://claude.ai/install.sh | bash
+
+# 5. Add the installation path to the PATH environment variable
+# We add both common install locations just to be safe
+ENV PATH="/home/bun/.local/bin:/home/bun/.claude/bin:${PATH}"
+
+# 6. Verify installation (this will fail build if it didn't work)
+RUN claude --version
+
+# Optional: Add Bun global bin to PATH globally
+ENV PATH="/home/bun/.bun/bin:${PATH}"
 RUN bash -c "$(wget https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh -O -)"
 # Set the working directory
 WORKDIR /workspace

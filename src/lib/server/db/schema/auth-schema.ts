@@ -1,4 +1,13 @@
-import { boolean, index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { boolean, index, pgTable, text, timestamp, unique, varchar } from 'drizzle-orm/pg-core';
+import { createTable } from './table-creator';
+
+export const websiteRolesTable = createTable(
+	'website_roles',
+	{
+		name: varchar('name').notNull().unique()
+	},
+	(t) => [unique('website_roles_name_idx').on(t.name)]
+);
 
 export const usersTable = pgTable('users', {
 	id: text('id').primaryKey(),
@@ -9,7 +18,8 @@ export const usersTable = pgTable('users', {
 	createdAt: timestamp('created_at').notNull(),
 	updatedAt: timestamp('updated_at')
 		.$onUpdate(() => new Date())
-		.notNull()
+		.notNull(),
+	websiteRoleId: text('website_role_id').references(() => websiteRolesTable.id)
 });
 
 export const sessionsTable = pgTable(

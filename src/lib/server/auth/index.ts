@@ -1,38 +1,9 @@
-import { db, type DbTxType } from '$lib/server/db';
+import { db } from '$lib/server/db';
 import { env } from '$lib/server/env/cli';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { customSession } from 'better-auth/plugins';
-import { sql } from 'drizzle-orm';
-import {
-	accountsTable,
-	sessionsTable,
-	usersTable,
-	usersToWebsiteRolesTable,
-	verificationsTable,
-	websiteRolesTable
-} from '../db/schema';
-
-const getWebsiteRole = async (ctx: DbTxType, userId: string) => {
-	const userWithRole = await ctx.query.usersTable.findFirst({
-		where: { id: userId },
-		with: {
-			websiteRoles: {
-				limit: 1
-			}
-		}
-	});
-	return userWithRole?.websiteRoles[0] || null;
-};
-
-const newUserToRole = async (ctx: DbTxType, userId: string, role: string = 'user') => {
-	console.log(`------- NEW USER TO ROLE ---------`);
-	const websiteRoleSQL = sql`(select ${websiteRolesTable.id} from ${websiteRolesTable} where ${websiteRolesTable.name} = ${role} limit 1)`;
-	await ctx.insert(usersToWebsiteRolesTable).values({
-		userId: userId,
-		websiteRoleId: websiteRoleSQL
-	});
-};
+import { accountsTable, sessionsTable, usersTable, verificationsTable } from '../db/schema';
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -50,24 +21,22 @@ export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true
 	},
-	databaseHooks: {
-		user: {
-			create: {
-				// Run this immediately after a new user is inserted
-				after: async (user) => {
-					await newUserToRole(db, user.id, 'user');
-				}
-			}
-		}
-	},
 	plugins: [
 		customSession(async ({ user, session }) => {
-			// Add custom data to session object
-			const websiteRole = await getWebsiteRole(db, user.id);
+			// Fetch user with websiteRole relation
+			const userWithRole = await db.query.usersTable.findFirst({
+				where: {
+					id: user.id
+				},
+				with: {
+					websiteRole: true
+				}
+			});
+
 			return {
 				user: {
 					...user,
-					websiteRole: websiteRole ? websiteRole.name : null
+					websiteRole: userWithRole?.websiteRole?.name || 'user'
 				},
 				session
 			};

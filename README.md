@@ -1,38 +1,49 @@
-# sv
+# Project Context: Biomechanical Workout Planner
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+## Stack:
 
-## Creating a project
+Typescript VIA Bun, Sveltekit (using Svelte 5 + features like runes), Postgres, Better-auth, Drizzle-kit (1.0 Beta), Shadcn-Svelte, Tailwindcss
 
-If you're seeing this, you've probably already done this step. Congrats!
+Using remote functions for sveltekit. see: https://svelte.dev/docs/kit/remote-functions/llms.txt
 
-```sh
-# create a new project in the current directory
-npx sv create
+### Explicit naming:
 
-# create a new project in my-app
-npx sv create my-app
-```
+tables are suffixed with Table. Types are suffixed with Type. Schemas (zod) are suffixed with Schema.
 
-## Developing
+### Explicit Errors:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Where possible, no throwing. All returns will be typed as Result type with <Value, Error>
 
-```sh
-npm run dev
+1. Core Philosophy
+   This web application generates and tracks workouts based on Movement Patterns rather than isolated muscle groups. It prioritizes functional alignment, structural balance, and intelligent scaling over arbitrary exercise selection.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+2. The 10-Point Movement Taxonomy
+   These are the immutable "Primary Keys" for sorting movements.
 
-## Building
+Squat: Bilateral knee-dominant (e.g., Back Squat).
 
-To create a production version of your app:
+Hinge: Bilateral hip-dominant (e.g., Deadlift).
 
-```sh
-npm run build
-```
+Lunge: Unilateral knee-dominant (e.g., Split Squat).
 
-You can preview the production build with `npm run preview`.
+Push (Horizontal): Anterior upper body (e.g., Bench Press).
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Push (Vertical): Overhead upper body (e.g., Military Press).
+
+Pull (Horizontal): Posterior upper body (e.g., Row).
+
+Pull (Vertical): Overhead pulling (e.g., Pull-up).
+
+Rotation: Torque production (e.g., Med Ball Throw).
+
+Core: Stability/Anti-movement (e.g., Plank, Pallof Press).
+
+Gait / Locomotion: Cyclical travel (e.g., Run, Farmer Carry).
+
+3. Differentiation Logic
+   To distinguish mechanically similar exercises with different physiological intents, we use Modality tags.
+
+Modality,Intent,Logic Example
+Monostructural (M),Cardio / Metabolic,"Running, Rowing"
+Gymnastics (G),Body control / Relative Strength,"Air Squat, Pull-up"
+Weightlifting (W),Structural Load / Absolute Strength,"Weighted Lunge, Deadlift"

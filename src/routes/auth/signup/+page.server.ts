@@ -8,5 +8,5 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw redirect(302, '/dashboard');
 	}
 
-	throw redirect(302, '/auth/signin');
+	return {};
 };
