@@ -12,9 +12,6 @@
 	let modalOpen = $state(false);
 	let selectedPattern = $state<MovementPatternType | undefined>(undefined);
 	let deleteConfirmId = $state<string | null>(null);
-	function refresh() {
-		refreshKey++;
-	}
 
 	function openCreateModal() {
 		selectedPattern = undefined;
@@ -30,7 +27,7 @@
 		const result = await deletePattern(id);
 		if (result.success) {
 			toast.success('Pattern deleted successfully');
-			refresh();
+			getMovementPatterns().refresh();
 		} else {
 			toast.error(result.error ?? 'Failed to delete pattern');
 		}
@@ -39,7 +36,7 @@
 
 	function handleFormSuccess() {
 		modalOpen = false;
-		refresh();
+		getMovementPatterns().refresh();
 	}
 </script>
 
