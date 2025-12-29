@@ -1,4 +1,13 @@
-import { pgTable, text, timestamp, unique, varchar, type AnyPgColumn, index } from 'drizzle-orm/pg-core';
+import {
+	index,
+	pgEnum,
+	pgTable,
+	text,
+	timestamp,
+	unique,
+	varchar,
+	type AnyPgColumn
+} from 'drizzle-orm/pg-core';
 import { uuidv7 } from 'uuidv7';
 import { usersTable } from './auth-schema';
 
@@ -44,10 +53,7 @@ export const modalitiesTable = pgTable(
 		intent: varchar('intent').notNull(),
 		...timestamps
 	},
-	(t) => [
-		unique('modality_code').on(t.code),
-		index('modalities_deleted_at_idx').on(t.deletedAt)
-	]
+	(t) => [unique('modality_code').on(t.code), index('modalities_deleted_at_idx').on(t.deletedAt)]
 );
 
 export const movementsTable = pgTable(
@@ -96,6 +102,8 @@ export const equipmentTable = pgTable(
 // --
 // Join tables --
 // --
+export const dominanceEnum = pgEnum('dominance', ['Primary', 'Secondary']);
+
 export const movementsToMovementPatternsTable = pgTable(
 	'movements_to_movement_patterns',
 	{
@@ -106,6 +114,7 @@ export const movementsToMovementPatternsTable = pgTable(
 		movementId: text('movement_id')
 			.notNull()
 			.references(() => movementsTable.id),
+		dominance: dominanceEnum('dominance').notNull().default('Primary'),
 		...timestamps
 	},
 	(t) => [
@@ -151,8 +160,5 @@ export const gymsTable = pgTable(
 			.references(() => usersTable.id, { onDelete: 'cascade' }),
 		...timestamps
 	},
-	(t) => [
-		index('gyms_deleted_at_idx').on(t.deletedAt),
-		index('gyms_owner_id_idx').on(t.ownerId)
-	]
+	(t) => [index('gyms_deleted_at_idx').on(t.deletedAt), index('gyms_owner_id_idx').on(t.ownerId)]
 );
