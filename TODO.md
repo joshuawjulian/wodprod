@@ -9,14 +9,19 @@
 
 ## 📦 Dictionary Management (Admin CRUD)
 
-### Movement Patterns
-- [ ] Create remote function for fetching all movement patterns
-- [ ] Create remote function for creating movement pattern
-- [ ] Create remote function for updating movement pattern
-- [ ] Create remote function for deleting movement pattern
-- [ ] Build out `/admin/dictionary/movement-patterns` page with data table
-- [ ] Add create/edit dialog with form validation
-- [ ] Add delete confirmation
+### Movement Patterns ✅ COMPLETE
+- [x] Create remote function for fetching all movement patterns
+- [x] Create remote function for creating movement pattern
+- [x] Create remote function for updating movement pattern
+- [x] Create remote function for deleting movement pattern
+- [x] Build out `/admin/dictionary/movement-patterns` page with data table
+- [x] Add create/edit dialog with form validation
+- [x] Add delete confirmation
+- [x] Create ResponsiveModal component (dialog/drawer)
+- [x] Implement mobile-responsive layout (table on desktop, cards on mobile)
+- [x] Use Svelte 5 `{#each await}` syntax for data fetching
+- [ ] Add loading skeleton instead of basic "Loading..." text
+- [ ] Add search/filter functionality
 
 ### Modalities
 - [ ] Create remote function for fetching all modalities
@@ -98,11 +103,11 @@
 
 ## 🎨 UI/UX Improvements
 
+- [x] Add toast notifications for success/error states (using svelte-sonner)
+- [x] Add empty states for all list views (implemented in movement-patterns)
+- [x] Create responsive mobile layouts (ResponsiveModal component)
 - [ ] Create consistent loading states across all pages
-- [ ] Add toast notifications for success/error states
 - [ ] Implement skeleton loaders for data tables
-- [ ] Add empty states for all list views
-- [ ] Create responsive mobile layouts
 - [ ] Add dark mode toggle (Tailwind already configured)
 - [ ] Create breadcrumb navigation for admin sections
 
@@ -156,9 +161,10 @@
 
 ## 🔄 Technical Debt & Refactoring
 
-- [ ] Standardize error handling across all modules (Result types)
-- [ ] Create shared Zod schemas for form validation
-- [ ] Extract common UI patterns into reusable components
+- [x] Standardize error handling across all modules (Result types) - using neverthrow
+- [x] Create shared Zod schemas for form validation (MovementPatternFormSchema, etc.)
+- [x] Extract common UI patterns into reusable components (ResponsiveModal)
+- [ ] Remove unused `refreshKey` variable from movement-patterns page
 - [ ] Add proper TypeScript types for all database queries
 - [ ] Implement proper logging strategy
 - [ ] Review and optimize database queries

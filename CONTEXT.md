@@ -13,7 +13,22 @@
 
 ---
 
-## 2025-12-27
+## 2025-12-27 PM
+
+**Focus:**
+Currently working on setting up remote functions within the forms for movement-patterns to set up something reproducable for other dictionary tables.
+**Completed:**
+Modal is good on desktop
+**Next:**
+Finish remote functions in Movement Pattern to better understand them
+Test drawer on mobile
+**Questions/Blockers:**
+File structure is organized but complicated. Remote functions have to live outside of $lib/server, but I want to hide most of the other server side functions within.
+**Notes:**
+
+---
+
+## 2025-12-27 AM
 
 **Focus:**
 Working on soft deletes, appear to be working
