@@ -8,7 +8,7 @@ import { auth } from '../src/lib/server/auth';
 
 // path to a file with schema you want to reset
 import { db } from '../src/lib/server/db';
-import { setWebsiteRole } from '../src/lib/server/modules/auth/actions';
+import { setWebsiteRole } from '../src/lib/server/modules/auth';
 
 //await reset(db, schema);
 await db.insert(websiteRolesTable).values({ name: 'user' }).onConflictDoNothing();
@@ -17,26 +17,30 @@ await db.insert(websiteRolesTable).values({ name: 'admin' }).onConflictDoNothing
 
 // if dev create admin user
 if (process.env.NODE_ENV === 'development') {
-	const returnedUser = await auth.api.signUpEmail({
-		body: {
-			email: 'admin@admin.com',
-			password: 'password',
-			name: 'Admin User'
-		}
-	});
-	const adminUser = await db.query.usersTable.findFirst({
-		where: {
-			email: 'admin@admin.com'
-		}
-	});
+	try {
+		const returnedUser = await auth.api.signUpEmail({
+			body: {
+				email: 'admin@admin.com',
+				password: 'password',
+				name: 'Admin User'
+			}
+		});
+		const adminUser = await db.query.usersTable.findFirst({
+			where: {
+				email: 'admin@admin.com'
+			}
+		});
 
-	if (adminUser) {
-		const result = await setWebsiteRole(db, adminUser.id, 'admin');
-		if (result.isErr()) {
-			console.error('Failed to set admin role for admin user:', result.error);
-		} else {
-			console.log('Admin role set for admin user.');
+		if (adminUser) {
+			const result = await setWebsiteRole(db, adminUser.id, 'admin');
+			if (result.isErr()) {
+				console.error('Failed to set admin role for admin user:', result.error);
+			} else {
+				console.log('Admin role set for admin user.');
+			}
 		}
+	} catch (error) {
+		console.error('Error creating admin user:', error);
 	}
 }
 
@@ -57,6 +61,21 @@ await db
 			code: 'W',
 			name: 'Weightlifting',
 			intent: 'Structural load / Absolute strength'
+		},
+		{
+			code: 'S',
+			name: 'Stretching / Mobility',
+			intent: 'Flexibility / Range of motion'
+		},
+		{
+			code: 'O',
+			name: 'Strongman / Odd Objects',
+			intent: 'Functional load / Real-world strength'
+		},
+		{
+			code: 'P',
+			name: 'Plyometrics',
+			intent: 'Explosive power / Reactive strength'
 		}
 	])
 	.onConflictDoNothing();
@@ -116,5 +135,7 @@ await db
 		}
 	])
 	.onConflictDoNothing();
+
+// seed movement
 
 console.log('Seeding complete.');

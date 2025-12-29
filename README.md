@@ -4,7 +4,7 @@
 
 Typescript VIA Bun, Sveltekit (using Svelte 5 + features like runes), Postgres, Better-auth, Drizzle-kit (1.0 Beta), Shadcn-Svelte, Tailwindcss
 
-Using remote functions for sveltekit. see: https://svelte.dev/docs/kit/remote-functions/llms.txt
+Using await expressions and remote functions for sveltekit. see: https://svelte.dev/docs/kit/remote-functions/llms.txt https://svelte.dev/docs/svelte/await-expressions/llms.txt
 
 ### Explicit naming:
 

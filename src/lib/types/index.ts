@@ -16,3 +16,17 @@ export const MovementPatternSchema = z.object({
 });
 
 export type MovementPatternType = z.infer<typeof MovementPatternSchema>;
+
+// Form schemas (for user input - no ID required)
+export const MovementPatternFormSchema = z.object({
+	name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
+	description: z.string().min(1, 'Description is required').max(500, 'Description is too long')
+});
+
+export type MovementPatternFormType = z.infer<typeof MovementPatternFormSchema>;
+
+export const MovementPatternUpdateSchema = MovementPatternFormSchema.partial().extend({
+	id: z.string().uuid()
+});
+
+export type MovementPatternUpdateType = z.infer<typeof MovementPatternUpdateSchema>;
