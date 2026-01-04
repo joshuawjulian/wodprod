@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(bun run:*)",
-      "WebFetch(domain:svelte.dev)"
+      "WebFetch(domain:svelte.dev)",
+      "Bash(ls:*)",
+      "Bash(npx shadcn-svelte@latest add:*)",
+      "Bash(bunx shadcn-svelte@latest add:*)",
+      "Bash(yes:*)",
+      "Bash(timeout 30 bash:*)",
+      "WebFetch(domain:www.shadcn-svelte.com)"
     ]
   }
 }

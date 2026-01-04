@@ -1,11 +1,20 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "088cd717-664a-41ba-8f6c-b22520ce27fe",
+  "id": "9ec90f77-69c7-4aab-a582-78db930e5a4c",
   "prevIds": [
-    "4ff63290-1d07-47b3-89ad-b33c36270cf9"
+    "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
+    {
+      "values": [
+        "Primary",
+        "Secondary"
+      ],
+      "name": "dominance",
+      "entityType": "enums",
+      "schema": "public"
+    },
     {
       "isRlsEnabled": false,
       "name": "accounts",
@@ -886,6 +895,19 @@
       "generated": null,
       "identity": null,
       "name": "movement_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "movements_to_movement_patterns"
+    },
+    {
+      "type": "dominance",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'Primary'",
+      "generated": null,
+      "identity": null,
+      "name": "dominance",
       "entityType": "columns",
       "schema": "public",
       "table": "movements_to_movement_patterns"

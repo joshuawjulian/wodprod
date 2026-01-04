@@ -18,6 +18,7 @@
 	} from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { LayoutData } from './$types';
+	import { goto } from '$app/navigation';
 
 	let { children, data }: { children: any; data: LayoutData } = $props();
 	let sidebarOpen = $state(true);
@@ -55,6 +56,7 @@
 
 	async function handleSignOut() {
 		await authClient.signOut();
+		goto('/');
 	}
 </script>
 

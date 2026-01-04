@@ -55,5 +55,25 @@ export const relations = defineRelations(schema, (r) => ({
 			from: r.equipmentTable.id.through(r.equipmentToMovementsTable.equipmentId),
 			to: r.movementsTable.id.through(r.equipmentToMovementsTable.movementId)
 		})
+	},
+	movementsToMovementPatternsTable: {
+		movement: r.one.movementsTable({
+			from: r.movementsToMovementPatternsTable.movementId,
+			to: r.movementsTable.id
+		}),
+		movementPattern: r.one.movementPatternsTable({
+			from: r.movementsToMovementPatternsTable.movementPatternId,
+			to: r.movementPatternsTable.id
+		})
+	},
+	equipmentToMovementsTable: {
+		movement: r.one.movementsTable({
+			from: r.equipmentToMovementsTable.movementId,
+			to: r.movementsTable.id
+		}),
+		equipment: r.one.equipmentTable({
+			from: r.equipmentToMovementsTable.equipmentId,
+			to: r.equipmentTable.id
+		})
 	}
 }));

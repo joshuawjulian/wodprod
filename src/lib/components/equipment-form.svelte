@@ -3,21 +3,21 @@
 	import { Field, FieldGroup, FieldLabel, FieldError } from '$lib/components/ui/field';
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import { createPattern, updatePattern } from '$lib/remote/index.remote';
-	import { MovementPatternFormSchema } from '$lib/types';
-	import type { MovementPatternType } from '$lib/types';
+	import { createEquipmentItem, updateEquipmentItem } from '$lib/remote/index.remote';
+	import { EquipmentFormSchema } from '$lib/types';
+	import type { EquipmentType } from '$lib/types';
 	import { toast } from 'svelte-sonner';
 
 	type Props = {
-		pattern?: MovementPatternType;
+		equipment?: EquipmentType;
 		onSuccess: () => void;
 		onCancel: () => void;
 	};
 
-	let { pattern, onSuccess, onCancel }: Props = $props();
+	let { equipment, onSuccess, onCancel }: Props = $props();
 
-	let name = $derived(pattern?.name ?? '');
-	let description = $derived(pattern?.description ?? '');
+	let name = $derived(equipment?.name ?? '');
+	let description = $derived(equipment?.description ?? '');
 	let loading = $state(false);
 	let errors = $state<Record<string, string>>({});
 
@@ -27,7 +27,7 @@
 		errors = {};
 
 		// Validate form data
-		const validation = MovementPatternFormSchema.safeParse({ name, description });
+		const validation = EquipmentFormSchema.safeParse({ name, description });
 
 		if (!validation.success) {
 			const fieldErrors = validation.error.flatten().fieldErrors;
@@ -40,9 +40,9 @@
 		}
 
 		// Call appropriate remote function
-		const result = pattern
-			? await updatePattern({ id: pattern.id, name, description })
-			: await createPattern(validation.data);
+		const result = equipment
+			? await updateEquipmentItem({ id: equipment.id, name, description })
+			: await createEquipmentItem(validation.data);
 
 		loading = false;
 
@@ -51,7 +51,7 @@
 			return;
 		}
 
-		toast.success(pattern ? 'Pattern updated successfully' : 'Pattern created successfully');
+		toast.success(equipment ? 'Equipment updated successfully' : 'Equipment created successfully');
 		onSuccess();
 	}
 </script>
@@ -63,7 +63,7 @@
 			<Input
 				id="name"
 				bind:value={name}
-				placeholder="e.g., Squat, Hinge, Lunge"
+				placeholder="e.g., Barbell, Dumbbells, Kettlebell"
 				required
 				aria-invalid={!!errors.name}
 			/>
@@ -77,7 +77,7 @@
 			<Textarea
 				id="description"
 				bind:value={description}
-				placeholder="Describe the movement pattern..."
+				placeholder="Describe the equipment..."
 				rows={4}
 				required
 				aria-invalid={!!errors.description}
@@ -91,7 +91,7 @@
 	<div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
 		<Button type="button" variant="outline" onclick={onCancel} disabled={loading}>Cancel</Button>
 		<Button type="submit" disabled={loading}>
-			{loading ? 'Saving...' : pattern ? 'Update Pattern' : 'Create Pattern'}
+			{loading ? 'Saving...' : equipment ? 'Update Equipment' : 'Create Equipment'}
 		</Button>
 	</div>
 </form>

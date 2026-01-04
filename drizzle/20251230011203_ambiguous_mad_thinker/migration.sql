@@ -1,3 +1,4 @@
+CREATE TYPE "dominance" AS ENUM('Primary', 'Secondary');--> statement-breakpoint
 CREATE TABLE "accounts" (
 	"id" text PRIMARY KEY,
 	"account_id" text NOT NULL,
@@ -18,32 +19,36 @@ CREATE TABLE "equipment" (
 	"id" text PRIMARY KEY,
 	"name" varchar NOT NULL,
 	"description" varchar NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "equipment_to_movements" (
 	"id" text PRIMARY KEY,
 	"equipment_id" text NOT NULL,
 	"movement_id" text NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "gym_roles" (
 	"id" text PRIMARY KEY,
 	"name" varchar NOT NULL,
 	"description" varchar NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "gyms" (
 	"id" text PRIMARY KEY,
 	"name" varchar NOT NULL,
 	"owner_id" text NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "modalities" (
@@ -51,16 +56,18 @@ CREATE TABLE "modalities" (
 	"code" varchar(1) NOT NULL CONSTRAINT "modality_code" UNIQUE,
 	"name" varchar NOT NULL,
 	"intent" varchar NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "movement_patterns" (
 	"id" text PRIMARY KEY,
 	"name" varchar NOT NULL CONSTRAINT "movement_pattern_name" UNIQUE,
 	"description" varchar NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "movements" (
@@ -69,16 +76,20 @@ CREATE TABLE "movements" (
 	"standards" text NOT NULL,
 	"video_url" varchar,
 	"modality_id" text NOT NULL,
+	"parent_movement_id" text,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "movements_to_movement_patterns" (
 	"id" text PRIMARY KEY,
 	"movement_pattern_id" text NOT NULL,
 	"movement_id" text NOT NULL,
+	"dominance" "dominance" DEFAULT 'Primary'::"dominance" NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "sessions" (
@@ -120,6 +131,23 @@ CREATE TABLE "website_roles" (
 );
 --> statement-breakpoint
 CREATE INDEX "accounts_userId_idx" ON "accounts" ("user_id");--> statement-breakpoint
+CREATE INDEX "equipment_deleted_at_idx" ON "equipment" ("deleted_at");--> statement-breakpoint
+CREATE INDEX "equipment_to_movements_deleted_at_idx" ON "equipment_to_movements" ("deleted_at");--> statement-breakpoint
+CREATE INDEX "equipment_to_movements_equipment_id_idx" ON "equipment_to_movements" ("equipment_id");--> statement-breakpoint
+CREATE INDEX "equipment_to_movements_movement_id_idx" ON "equipment_to_movements" ("movement_id");--> statement-breakpoint
+CREATE INDEX "equipment_to_movements_composite_idx" ON "equipment_to_movements" ("equipment_id","movement_id");--> statement-breakpoint
+CREATE INDEX "gym_roles_deleted_at_idx" ON "gym_roles" ("deleted_at");--> statement-breakpoint
+CREATE INDEX "gyms_deleted_at_idx" ON "gyms" ("deleted_at");--> statement-breakpoint
+CREATE INDEX "gyms_owner_id_idx" ON "gyms" ("owner_id");--> statement-breakpoint
+CREATE INDEX "modalities_deleted_at_idx" ON "modalities" ("deleted_at");--> statement-breakpoint
+CREATE INDEX "movement_patterns_deleted_at_idx" ON "movement_patterns" ("deleted_at");--> statement-breakpoint
+CREATE INDEX "movements_deleted_at_idx" ON "movements" ("deleted_at");--> statement-breakpoint
+CREATE INDEX "movements_modality_id_idx" ON "movements" ("modality_id");--> statement-breakpoint
+CREATE INDEX "movements_parent_movement_id_idx" ON "movements" ("parent_movement_id");--> statement-breakpoint
+CREATE INDEX "movements_to_patterns_deleted_at_idx" ON "movements_to_movement_patterns" ("deleted_at");--> statement-breakpoint
+CREATE INDEX "movements_to_patterns_movement_id_idx" ON "movements_to_movement_patterns" ("movement_id");--> statement-breakpoint
+CREATE INDEX "movements_to_patterns_pattern_id_idx" ON "movements_to_movement_patterns" ("movement_pattern_id");--> statement-breakpoint
+CREATE INDEX "movements_to_patterns_composite_idx" ON "movements_to_movement_patterns" ("movement_id","movement_pattern_id");--> statement-breakpoint
 CREATE INDEX "sessionsTables_userId_idx" ON "sessions" ("user_id");--> statement-breakpoint
 CREATE INDEX "verifications_identifier_idx" ON "verifications" ("identifier");--> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_users_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE;--> statement-breakpoint
@@ -127,6 +155,7 @@ ALTER TABLE "equipment_to_movements" ADD CONSTRAINT "equipment_to_movements_equi
 ALTER TABLE "equipment_to_movements" ADD CONSTRAINT "equipment_to_movements_movement_id_movements_id_fkey" FOREIGN KEY ("movement_id") REFERENCES "movements"("id");--> statement-breakpoint
 ALTER TABLE "gyms" ADD CONSTRAINT "gyms_owner_id_users_id_fkey" FOREIGN KEY ("owner_id") REFERENCES "users"("id") ON DELETE CASCADE;--> statement-breakpoint
 ALTER TABLE "movements" ADD CONSTRAINT "movements_modality_id_modalities_id_fkey" FOREIGN KEY ("modality_id") REFERENCES "modalities"("id");--> statement-breakpoint
+ALTER TABLE "movements" ADD CONSTRAINT "movements_parent_movement_id_movements_id_fkey" FOREIGN KEY ("parent_movement_id") REFERENCES "movements"("id");--> statement-breakpoint
 ALTER TABLE "movements_to_movement_patterns" ADD CONSTRAINT "movements_to_movement_patterns_79Yg0mug8eql_fkey" FOREIGN KEY ("movement_pattern_id") REFERENCES "movement_patterns"("id");--> statement-breakpoint
 ALTER TABLE "movements_to_movement_patterns" ADD CONSTRAINT "movements_to_movement_patterns_movement_id_movements_id_fkey" FOREIGN KEY ("movement_id") REFERENCES "movements"("id");--> statement-breakpoint
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_users_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE;--> statement-breakpoint
